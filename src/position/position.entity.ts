@@ -36,7 +36,7 @@ export class Position extends BaseEntity {
   @Column()
   numberOfUser: number;
 
-  @ManyToMany(() => User, (user) => user.positions, { cascade: true })
+  @ManyToMany(() => User, (user) => user.positions)
   @JoinTable()
   members: User[];
 

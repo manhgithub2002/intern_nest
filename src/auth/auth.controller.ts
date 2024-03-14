@@ -8,14 +8,20 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterUserDto } from './dto/registerUserDto';
-import { LoginAuthDto } from './dto/loginAuthDto';
+import { RegisterUserDto } from './dto/registerUser.dto';
+import { LoginAuthDto } from './dto/loginAuth.dto';
 import { AccessTokenGuard } from './guards/accessToken.guard';
 import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import { Response } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
-import { FireBaseLoginResponse } from './dto/loginResponseDto';
+import { FireBaseLoginResponse } from './dto/firebaseLoginResponse.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { SendOtpDto } from './dto/sendOtp.dto';
+import { VerifyOtpDto } from './dto/verifyOtp.dto';
+import { ForgotPasswordOtpDto } from './dto/forgotPasswordOtp.dto';
+import { recoverPasswordOtpDto } from './dto/recoverPassword.dto';
 
+@ApiTags('Xác thực')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -54,38 +60,31 @@ export class AuthController {
     );
     return res.send(temp);
   }
-  @UseGuards(AccessTokenGuard)
-  @Get('profile')
-  async getProfile(@Req() req) {
-    return req.user['sub'];
-  }
 
   @Post('send-otp')
-  async sendOtp(@Req() req) {
-    this.authService.sendOtpViaEmail(req.body.email as string);
+  async sendOtp(@Body() sendOtpDto: SendOtpDto) {
+    this.authService.sendOtpViaEmail(sendOtpDto.email);
   }
 
   @Post('verify-otp')
-  async verifyOtp(@Req() req) {
-    this.authService.verifyOtp(
-      req.body.email as string,
-      req.body.otp as string,
-    );
+  async verifyOtp(@Body() verifyOtpDto: VerifyOtpDto) {
+    this.authService.verifyOtp(verifyOtpDto.email, verifyOtpDto.otp);
   }
 
   @Post('forgot-password')
-  async forgotPassword(@Req() req) {
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordOtpDto) {
     this.authService.forgotPassword(
-      req.body.email as string,
-      req.body.otp as string,
+      forgotPasswordDto.email,
+      forgotPasswordDto.otp,
     );
   }
 
   @Post('recover-password')
-  async recoverPassword(@Req() req) {
+  async recoverPassword(@Body() recoverPassword: recoverPasswordOtpDto) {
     this.authService.recoverPassword(
-      req.body.email as string,
-      req.body.otp as string,
+      recoverPassword.newPassword,
+      recoverPassword.email,
+      recoverPassword.otp,
     );
   }
 }

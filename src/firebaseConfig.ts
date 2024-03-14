@@ -1,4 +1,5 @@
 import { getFirestore } from 'firebase-admin/firestore';
+import { messaging } from 'firebase-admin';
 
 var admin = require('firebase-admin');
 var serviceAccount = {

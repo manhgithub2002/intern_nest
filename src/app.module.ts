@@ -12,6 +12,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { Position } from './position/position.entity';
 import { Company } from './company/company.entity';
 import { Dept } from './dept/dept.entity';
+import { Profile } from './profile/profile.entity';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { Dept } from './dept/dept.entity';
       database: 'tinamys',
       synchronize: true,
       logging: true,
-      entities: [User, Position, Company, Dept],
+      entities: [User, Position, Company, Dept, Profile],
       migrations: [],
       subscribers: [],
     }),

@@ -1,8 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
-export class VerifyOtpDto {
+export class recoverPasswordOtpDto {
   @ApiProperty()
+  @IsNotEmpty()
+  newPassword: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 

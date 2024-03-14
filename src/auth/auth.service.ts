@@ -1,16 +1,16 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from '../users/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { LoginAuthDto } from './dto/loginAuthDto';
-import { RegisterUserDto } from './dto/registerUserDto';
+import { LoginAuthDto } from './dto/loginAuth.dto';
+import { RegisterUserDto } from './dto/registerUser.dto';
 import * as argon2 from 'argon2';
 import { Response } from 'express';
 import { User } from '../users/user.entity';
 import { JwtPayload } from 'jsonwebtoken';
-import { FireBaseLoginResponse } from './dto/loginResponseDto';
 import admin from '../firebaseConfig';
 import { MailerService } from '@nestjs-modules/mailer';
 import otpGenerator from 'otp-generator';
+import { FireBaseLoginResponse } from './dto/firebaseLoginResponse.dto';
 
 @Injectable()
 export class AuthService {
@@ -193,7 +193,7 @@ export class AuthService {
     return {
       accessToken: accessToken,
       refreshToken: refreshToken,
-      user: existingUser,
+      user: result,
     };
   }
 
@@ -216,5 +216,5 @@ export class AuthService {
 
   async forgotPassword(email: string, otp: string) {}
 
-  async recoverPassword(email: string, otp: string) {}
+  async recoverPassword(newPassword: string, email: string, otp: string) {}
 }

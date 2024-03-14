@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import 'dotenv/config';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const PORT = process.env.PORT || 4000;
@@ -11,7 +12,24 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.setGlobalPrefix('api');
-  // app.use(new ValidationPipe());
+
+  const config = new DocumentBuilder()
+    .setTitle('Mapping your success')
+    .setDescription('Description document for Rest API')
+    .setVersion('1.0')
+    .addTag('default')
+    .addTag('Xác thực')
+    .addTag('Tài khoản cá nhân')
+    .addTag('Admin: Tài khoản người dùng')
+    .addTag('Admin: Thống kê tài khoản người dùng')
+    .addTag('Admin: Tài khoản nhân viên')
+    .addTag('Admin: Quản lý thẻ tags')
+    .addTag('Xác thực')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(PORT, () =>
     console.log(
